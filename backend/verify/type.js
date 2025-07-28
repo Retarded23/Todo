@@ -13,7 +13,6 @@ const updateTodo = zod.object({
     title: zod.string().optional(),
     description: zod.string().optional(),
     completed: zod.boolean().optional(),
-    // Apply the same fix here
     dueDate: zod.string().optional(),
     priority: zod.enum(['High', 'Medium', 'Low']).optional(),
 });
