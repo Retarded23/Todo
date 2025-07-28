@@ -5,7 +5,9 @@ import TodoForm from './components/TodoForm';
 import TodoItem from './components/TodoItem';
 
 // Define the base URL for your API
-const API_URL = "http://localhost:5000/api/todos";
+// After
+const API_URL = "/api/todos";
+
 
 function App() {
   const [todos, setTodos] = useState([]);
