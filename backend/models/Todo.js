@@ -18,6 +18,14 @@ const TodoSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  dueDate:{
+    type: String,
+    required: true,
+  },
+  priority:{
+    type: String,
+    enum: ['High', 'Medium', 'Low'],
+  },
 });
 
 module.exports = mongoose.model('Todo', TodoSchema);

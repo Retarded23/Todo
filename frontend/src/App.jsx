@@ -28,7 +28,6 @@ function App() {
   const addTodo = async (todo) => {
     try {
         const response = await axios.post(API_URL, todo);
-        // Correctly access the todo object from the response
         setTodos((prev) => [response.data.todo, ...prev]); 
     } catch (error) {
         console.error("Error adding todo:", error);
@@ -64,13 +63,11 @@ function App() {
         console.error("Todo not found in local state:", id);
         return;
       }
-      // Send the entire updated object to the backend
+
       const response = await axios.put(`${API_URL}/${id}`, {
         ...todoToToggle,
         completed: !todoToToggle.completed,
       });
-
-      // Update the state with the response from the backend
       setTodos((prev) =>
         prev.map((prevTodo) => (prevTodo._id === id ? response.data : prevTodo))
       );
