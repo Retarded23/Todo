@@ -12,6 +12,7 @@ function TodoItem({ todo }) {
     });
     const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
     const { updateTodo, deleteTodo, toggleComplete } = useTodo();
+    
 
     const getCardColor = () => {
     if (!todo.dueDate || todo.completed) return 'bg-zinc-800'; 

@@ -78,6 +78,9 @@ function App() {
     }
   };
 
+  const sortedTodos = [...todos].sort(
+    (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
+  );
 
 
   return (
@@ -90,10 +93,8 @@ function App() {
           </div>
           <div className="flex flex-wrap gap-y-3">
             {/* Loop and Add TodoItem here */}
-            {todos.map((todo) => (
-              <div key={todo._id} className='w-full'>
-                <TodoItem todo={todo} />
-              </div>
+            {sortedTodos.map((todo) => (
+              <TodoItem key={todo._id} todo={todo} />
             ))}
           </div>
         </div>
