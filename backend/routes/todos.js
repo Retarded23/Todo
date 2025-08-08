@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Todo = require('../models/Todo');
-const { createTodo, updateTodo } = require('../verify/type');
+const { createTodo, updateTodo} = require('../verify/type');
 
 // @desc Get all todos
 router.get('/', async (req, res) => {
@@ -36,7 +36,10 @@ router.post('/', async (req, res) => {
             todo: newTodo,
         });
     } catch (err) {
-        res.status(500).json({ message: 'Could not create todo' });
+        res.status(500).json({ 
+            message: 'Could not create todo',
+            error: err.message 
+        });
     }
 });
 
