@@ -4,10 +4,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { registerSchema, loginSchema } = require('../verify/type');
 const User = require('../models/Auth');
-// Replace with your own secret, ideally from environment variables
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Generic middleware to validate request body against a Zod schema
 function validate(schema) {
   return (req, res, next) => {
     const result = schema.safeParse(req.body);
@@ -25,9 +23,7 @@ function validate(schema) {
   };
 }
 
-// @route   POST /api/auth/register
-// @desc    Register new user
-// @access  Public
+// POST /api/auth/register
 router.post('/register', validate(registerSchema), async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -48,7 +44,6 @@ router.post('/register', validate(registerSchema), async (req, res) => {
 
     await user.save();
 
-    // Create JWT Payload and sign token
     const payload = { userId: user._id };
     jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
       if (err) throw err;
@@ -67,9 +62,7 @@ router.post('/register', validate(registerSchema), async (req, res) => {
   }
 });
 
-// @route   POST /api/auth/login
-// @desc    Authenticate user and get token
-// @access  Public
+// POST /api/auth/login
 router.post('/login', validate(loginSchema), async (req, res) => {
   try {
     const { email, password } = req.body;

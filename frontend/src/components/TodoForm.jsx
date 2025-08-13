@@ -7,12 +7,11 @@ function TodoForm() {
         title: "",
         description: "",
         dueDate: "",
-        priority: "Medium" // Set a default priority
+        priority: "Medium" 
     });
 
     const { addTodo } = useTodo();
 
-    // This handler works for all input types without change
     const handleChange = (e) => {
         const { name, value } = e.target;
         setTodo(prevTodo => ({

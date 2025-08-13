@@ -3,7 +3,6 @@ import { useTodo } from '../contexts/contexts';
 
 function TodoItem({ todo }) {
     const [isTodoEditable, setIsTodoEditable] = useState(false);
-    
     const [editableTodo, setEditableTodo] = useState({
         title: todo.title,
         description: todo.description,
@@ -12,8 +11,6 @@ function TodoItem({ todo }) {
     });
     const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
     const { updateTodo, deleteTodo, toggleComplete } = useTodo();
-    
-
     const getCardColor = () => {
     if (!todo.dueDate || todo.completed) return 'bg-zinc-800'; 
 
@@ -26,7 +23,6 @@ function TodoItem({ todo }) {
     if (daysLeft <= 7) return 'bg-yellow-900/90 border border-yellow-500';
     return 'bg-zinc-800';
     };
-
     const edit = () => {
         if (!editableTodo.title || !editableTodo.dueDate) {
             alert("Title and Due Date are required.");
@@ -64,7 +60,7 @@ function TodoItem({ todo }) {
 
     return (
         <div
-            className={`flex flex-col border border-black/10 rounded-lg px-4 py-3 shadow-sm transition-all duration-300 ${getCardColor()} ${
+            className={`flex flex-col border border-black/10 rounded-lg px-4 py-3 w-full  shadow-sm transition-all duration-300 ${getCardColor()} ${
                 todo.completed ? 'opacity-50' : ''
             }`}
         >
