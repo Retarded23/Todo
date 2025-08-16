@@ -48,7 +48,7 @@ function TodoForm() {
     };
 
     return (
-        <form onSubmit={add} className="flex flex-col space-y-4">
+        <form onSubmit={add} className="flex flex-col space-y-4  ">
             <input
                 type="text"
                 name="title"

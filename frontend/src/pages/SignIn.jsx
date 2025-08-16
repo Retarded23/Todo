@@ -21,30 +21,37 @@ const SignIn = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
+  e.preventDefault();
+  setError('');
+  setIsLoading(true);
 
-    try {
-      const response = await axios.post('/api/auth/register', formData);
-      alert('Registration successful! Please login.');
-      navigate('/login'); 
-    } catch (err) {
-      if (err.response && err.response.data && err.response.data.msg) {
-        setError(err.response.data.msg);
-      } else {
-        setError('Registration failed. Please try again.');
-      }
-    } finally {
-      setIsLoading(false);
+  // Client-side validation before sending
+  if (!formData.username || !formData.email || !formData.password) {
+    setError("All fields are required.");
+    setIsLoading(false);
+    return;
+  }
+
+  try {
+    await axios.post('https://todo-vs9q.onrender.com/api/auth/register', formData);
+    alert('Registration successful! Please login.');
+    navigate('/login');
+  } catch (err) {
+    if (err.response && err.response.data && err.response.data.msg) {
+      setError(err.response.data.msg); // Show detailed backend error
+    } else {
+      setError('Registration failed. Please try again.');
     }
-  };
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white font-sans">
       <div className="w-full max-w-xl flex flex-col md:flex-row bg-white">
         {/* SignIn Panel */}
-        <div className="flex-1 flex flex-col justify-center p-8">
+        <div className="flex-1 flex flex-col justify-center ">
           {/* Heading */}
           <h2 className="text-2xl font-bold text-[#1936a3] mb-6 text-center tracking-wide">Sign Up</h2>
 

@@ -1,9 +1,11 @@
+// routes/auth.js
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { registerSchema, loginSchema } = require('../verify/type');
 const User = require('../models/Auth');
+
 const JWT_SECRET = process.env.JWT_SECRET;
 
 function validate(schema) {
@@ -17,7 +19,6 @@ function validate(schema) {
         }))
       });
     }
-    // Replace req.body with parsed and validated data (optional, but good practice)
     req.body = result.data;
     next();
   };
@@ -33,15 +34,10 @@ router.post('/register', validate(registerSchema), async (req, res) => {
       return res.status(400).json({ msg: 'User with this email already exists' });
     }
 
-    const salt = await bcrypt.genSalt(5);
+    const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    user = new User({
-      username,
-      email,
-      password: hashedPassword,
-    });
-
+    user = new User({ username, email, password: hashedPassword });
     await user.save();
 
     const payload = { userId: user._id };
@@ -49,11 +45,7 @@ router.post('/register', validate(registerSchema), async (req, res) => {
       if (err) throw err;
       res.json({
         token,
-        user: {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-        },
+        user: { id: user._id, username: user.username, email: user.email }
       });
     });
   } catch (err) {
@@ -82,11 +74,7 @@ router.post('/login', validate(loginSchema), async (req, res) => {
       if (err) throw err;
       res.json({
         token,
-        user: {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-        },
+        user: { id: user._id, username: user.username, email: user.email }
       });
     });
   } catch (err) {

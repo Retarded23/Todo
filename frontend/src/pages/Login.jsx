@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import image from '../../assets/image.png';
+import {useAuth} from '../contexts/AuthContext';
+
+
 const Login = () => {
-  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth(); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,16 +22,32 @@ const Login = () => {
     setError('');
     setIsLoading(true);
 
+    if (!formData.email || !formData.password) {
+      setError('Email and password required.');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await axios.post('/api/auth/login', formData);
+      const response = await axios.post('https://todo-vs9q.onrender.com/api/auth/login', formData);
       const { token, user } = response.data;
 
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
+      // console.log('Login successful:', user);
+
+      login(user.username,token); 
       navigate('/');
+
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.msg) {
-        setError(err.response.data.msg);
+      if (err.response && err.response.data) {
+        if (err.response.data.msg) {
+          setError(err.response.data.msg);
+        } else if (err.response.data.errors) {
+          setError(err.response.data.errors.map(e => e.message).join('\n'));
+        } else {
+          setError('Login failed. Please try again.');
+        }
       } else {
         setError('Login failed. Please try again.');
       }
@@ -35,6 +55,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white font-sans">
@@ -47,13 +68,12 @@ const Login = () => {
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <input
-              type="text"
-              name="username"
-              value={formData.username}
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
-              placeholder="Username"
+              placeholder="Email"
               className="rounded-full py-3 px-5 bg-[#e7e9f6] text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fb4b23] border-none"
-              autoComplete="username"
               required
             />
             <input
